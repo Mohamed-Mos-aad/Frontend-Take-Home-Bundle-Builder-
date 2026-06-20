@@ -65,17 +65,15 @@ export const BundleProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       setSelectedOptions(initialOpts);
     }
 
-    // Attempt to fetch fresh data from local endpoint (dev mode only)
-    if (process.env.NODE_ENV !== "production") {
-      fetch("/api/bundle")
-        .then((res) => res.json())
-        .then((fetchedData) => {
-          setData(fetchedData);
-        })
-        .catch((err) => {
-          console.log("Local API fetch skipped or failed: ", err);
-        });
-    }
+    // Fetch fresh data from API endpoint (works on local dev & Vercel production)
+    fetch("/api/bundle")
+      .then((res) => res.json())
+      .then((fetchedData) => {
+        setData(fetchedData);
+      })
+      .catch((err) => {
+        console.log("API fetch failed, using static fallback: ", err);
+      });
   }, []);
 
   const handleIncrement = (productId: string, option?: string) => {

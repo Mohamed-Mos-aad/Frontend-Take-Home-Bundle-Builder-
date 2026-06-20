@@ -2,8 +2,6 @@
 
 A premium, interactive web application built with **React / Next.js**, **TypeScript**, and **Tailwind CSS v4** that allows customers to configure their home security systems dynamically.
 
-🌐 **Live Demo:** [https://mohamed-mos-aad.github.io/Frontend-Take-Home-Bundle-Builder-/](https://mohamed-mos-aad.github.io/Frontend-Take-Home-Bundle-Builder-/)
-
 ---
 
 ## 🚀 Quick Start / Run Instructions
@@ -21,12 +19,23 @@ npm run dev
 ```
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-### 3. Build & Export Statically
-To build the project into a static HTML export (for hosting on GitHub Pages or other static servers):
+### 3. Build & Run Locally (Production Mode)
 ```bash
 npm run build
+npm run start
 ```
-The output will be generated inside the `out` directory.
+
+---
+
+## ☁️ Deployment on Vercel
+
+Since this is a Next.js application with dynamic backend Route Handlers (`app/api/bundle/route.ts`), it is best deployed on **Vercel** which supports Next.js features out-of-the-box:
+
+1. Push your repository to GitHub.
+2. Go to [Vercel](https://vercel.com/) and log in with your GitHub account.
+3. Click **Add New...** -> **Project**.
+4. Import your repository `Frontend-Take-Home-Bundle-Builder-`.
+5. Click **Deploy**. Vercel will automatically build the project and assign a free live URL (e.g. `your-project-name.vercel.app`).
 
 ---
 
@@ -48,19 +57,6 @@ Rather than passing props down multiple layers (Prop Drilling), the state is man
 - Clicking **"Save my system for later"** stores the current state (`selectedQuantities`, `selectedOptions`, and `activeStep`) in the browser's local storage.
 - On page load, the context reads this data to fully restore the user's progress.
 - Prevents server-side rendering (SSR) hydration issues in Next.js using defensive `typeof window !== 'undefined'` checks.
-
----
-
-## ⚖️ Tradeoffs & Compromises
-
-### GitHub Pages (Static Hosting) vs. Dynamic API Routes
-- **The Challenge:** GitHub Pages is a static file host. Next.js Route Handlers (`app/api/bundle/route.ts`) require a Node.js server and cannot execute in static exports (`output: 'export'`).
-- **The Solution:** 
-  1. We extracted the static dataset to `context/bundleData.ts`.
-  2. The Context API uses `bundleData` directly as the default state.
-  3. In **local development**, the app attempts to dynamically fetch fresh data from the dynamic `/api/bundle` route.
-  4. In **production / static export**, it gracefully falls back to the imported dataset.
-  This setup delivers **instant page loading** (zero hydration delay) and works perfectly on GitHub Pages while keeping the API Route Handler code intact to demonstrate full-stack capabilities.
 
 ---
 

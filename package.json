@@ -2,14 +2,11 @@
   "name": "frontend_task_home_bundle_builder",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://mohamed-mos-aad.github.io/Frontend-Take-Home-Bundle-Builder-",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d out"
+    "lint": "eslint"
   },
   "dependencies": {
     "next": "16.2.9",
