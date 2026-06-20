@@ -59,7 +59,7 @@ export default function ProductCard({
       </div>
 
       {/* Right/Bottom Column (Details & Actions) */}
-      <div className="flex-grow flex flex-col gap-2 min-w-0">
+      <div className="grow flex flex-col gap-2 min-w-0">
         <h2 className="text-[18px] text-[#1F1F1F] font-semibold leading-tight">{product.name}</h2>
         <p className="text-[14px] text-[#1F1F1F]/75 leading-snug">
           {product.description.includes("Learn More") ? (
