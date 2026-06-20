@@ -28,6 +28,7 @@ function BundleBuilder() {
     setActiveStep,
     selectedQuantities,
     saveSystem,
+    showSaveToast,
     selectedItems,
     handleIncrement,
     handleDecrement,
@@ -53,8 +54,21 @@ function BundleBuilder() {
   }
 
   return (
-    <div className="w-full min-h-screen bg-white font-sans dark:bg-black py-12 px-4 md:px-8 xl:px-15">
-      <div className="max-w-360 mx-auto grid grid-cols-1 xl:grid-cols-3 gap-8 xl:gap-7.25 items-start">
+    <div className="w-full min-h-screen bg-white font-sans dark:bg-black py-0 md:py-12 px-0 md:px-8 xl:px-15 relative">
+      {/* Toast Notification */}
+      {showSaveToast && (
+        <div className="fixed bottom-5 left-1/2 -translate-x-1/2 z-[100] flex items-center gap-2 bg-[#0AA288] text-white px-6 py-3.5 rounded-lg shadow-[0_4px_20px_rgba(10,162,136,0.3)] animate-bounce font-medium text-[16px] whitespace-nowrap">
+          <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          System configuration saved successfully!
+        </div>
+      )}
+      <div className="max-w-360 mx-auto">
+        <h1 className="w-full text-center text-[#1F1F1F] font-bold text-[31.88px] tracking-[-0.06px] leading-[110%] mb-8 pt-8 md:pt-0">
+          Let’s get started!
+        </h1>
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 xl:gap-7.25 items-start">
         <div className="w-full xl:col-span-2 flex flex-col gap-4">
         {/* Accordion Steps */}
         {data.steps.map((step: any, index: number) => {
@@ -75,7 +89,7 @@ function BundleBuilder() {
           );
         })}
         </div>
-        <div className="w-5/6 mx-auto xl:w-full xl:mx-0 xl:col-span-1 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-1 gap-8 lg:gap-13 bg-[#EDF4FF] p-6 md:p-9 xl:p-6 rounded-[10px]">
+        <div className="w-full xl:col-span-1 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-1 gap-8 lg:gap-13 bg-[#EDF4FF] p-6 md:p-9 xl:p-6 rounded-[10px]">
           <div className="flex flex-col">
           <div className="border-b mb-4 pb-2.5">
             <h1 className="text-[28px] text-[#1F1F1F]">Your security system</h1>
@@ -86,8 +100,8 @@ function BundleBuilder() {
           <div className="flex flex-col gap-2 border-b mb-4 pb-2.5">
             <h2>Cameras</h2>
             {selectedItems.filter(item => item.id.startsWith("cam_")).map((item) => (
-              <div key={item.id} className="flex justify-between items-center w-full gap-2">
-                <div className="flex items-center gap-2 min-w-0">
+              <div key={item.id} className="flex flex-col sm:flex-row sm:justify-between sm:items-center w-full gap-2 border-b border-gray-100/50 pb-2 sm:pb-0 sm:border-none">
+                <div className="flex items-center gap-2 min-w-0 w-full sm:w-auto">
                   <img
                     src={item.image || `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23FFFFFF'/></svg>`}
                     alt={item.name}
@@ -101,7 +115,7 @@ function BundleBuilder() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 xl:gap-4 shrink-0">
+                <div className="flex items-center justify-start sm:justify-end gap-4 sm:gap-6 w-full sm:w-auto pl-[49px] sm:pl-0 shrink-0">
                   {/* Quantity Controller */}
                   <div className="flex items-center gap-1.5 xl:gap-2">
                     <button
@@ -139,14 +153,14 @@ function BundleBuilder() {
             <h2>Sensors</h2>
             
             {/* Wyze Sense Hub (Required) - Pre-populated */}
-            <div className="flex justify-between items-center w-full">
-              <div className="flex items-center gap-2">
-                <div className="w-10.25 h-10.25 rounded-md bg-white flex items-center justify-center font-bold text-[#575757] text-[10px] border border-gray-100">Hub</div>
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center w-full gap-2 border-b border-gray-100/50 pb-2 sm:pb-0 sm:border-none">
+              <div className="flex items-center gap-2 min-w-0 w-full sm:w-auto">
+                <div className="w-10.25 h-10.25 rounded-md bg-white flex items-center justify-center font-bold text-[#575757] text-[10px] border border-gray-100 shrink-0">Hub</div>
                 <div>
                   <h3 className="text-[16px] text-[#1F1F1F] font-semibold">Wyze Sense Hub (Required)</h3>
                 </div>
               </div>
-              <div className="flex items-center gap-6">
+              <div className="flex items-center justify-start sm:justify-end gap-4 sm:gap-6 w-full sm:w-auto pl-[49px] sm:pl-0 shrink-0">
                 <div className="flex items-center gap-2.5">
                   <button
                     onClick={() => handleDecrement("pre_hub")}
@@ -172,8 +186,8 @@ function BundleBuilder() {
 
             {/* Selected Sensors */}
             {selectedItems.filter(item => item.id.startsWith("sensor_")).map((item) => (
-              <div key={item.id} className="flex justify-between items-center w-full gap-2">
-                <div className="flex items-center gap-2 min-w-0">
+              <div key={item.id} className="flex flex-col sm:flex-row sm:justify-between sm:items-center w-full gap-2 border-b border-gray-100/50 pb-2 sm:pb-0 sm:border-none">
+                <div className="flex items-center gap-2 min-w-0 w-full sm:w-auto">
                   {item.image ? (
                     <img
                       src={item.image}
@@ -188,7 +202,7 @@ function BundleBuilder() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 xl:gap-4 shrink-0">
+                <div className="flex items-center justify-start sm:justify-end gap-4 sm:gap-6 w-full sm:w-auto pl-[49px] sm:pl-0 shrink-0">
                   <div className="flex items-center gap-1.5 xl:gap-2">
                     <button
                       onClick={() => handleDecrement(item.productId, item.selectedOption)}
@@ -219,8 +233,8 @@ function BundleBuilder() {
           <div className="flex flex-col gap-2 border-b mb-4 pb-2.5">
             <h2>accessories</h2>
             {selectedItems.filter(item => item.id.startsWith("acc_")).map((item) => (
-              <div key={item.id} className="flex justify-between items-center w-full gap-2">
-                <div className="flex items-center gap-2 min-w-0">
+              <div key={item.id} className="flex flex-col sm:flex-row sm:justify-between sm:items-center w-full gap-2 border-b border-gray-100/50 pb-2 sm:pb-0 sm:border-none">
+                <div className="flex items-center gap-2 min-w-0 w-full sm:w-auto">
                   {item.image ? (
                     <img
                       src={item.image}
@@ -235,7 +249,7 @@ function BundleBuilder() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 xl:gap-4 shrink-0">
+                <div className="flex items-center justify-start sm:justify-end gap-4 sm:gap-6 w-full sm:w-auto pl-[49px] sm:pl-0 shrink-0">
                   <div className="flex items-center gap-1.5 xl:gap-2">
                     <button
                       onClick={() => handleDecrement(item.productId, item.selectedOption)}
@@ -266,8 +280,8 @@ function BundleBuilder() {
           <div className="flex flex-col gap-2 border-b mb-4 pb-2.5">
             <h2>plan</h2>
             {selectedItems.filter(item => item.id.startsWith("plan_")).map((item) => (
-              <div key={item.id} className="flex justify-between items-center w-full gap-2">
-                <div className="flex items-center gap-2 min-w-0">
+              <div key={item.id} className="flex flex-col sm:flex-row sm:justify-between sm:items-center w-full gap-2 border-b border-gray-100/50 pb-2 sm:pb-0 sm:border-none">
+                <div className="flex items-center gap-2 min-w-0 w-full sm:w-auto">
                   {item.image ? (
                     <img
                       src={item.image}
@@ -282,7 +296,7 @@ function BundleBuilder() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 xl:gap-4 shrink-0">
+                <div className="flex items-center justify-start sm:justify-end gap-4 sm:gap-6 w-full sm:w-auto pl-[49px] sm:pl-0 shrink-0">
                   <div className="flex items-center gap-1.5 xl:gap-2">
                     <button
                       onClick={() => handleDecrement(item.productId, item.selectedOption)}
@@ -311,14 +325,14 @@ function BundleBuilder() {
 
           {/* Fast Shipping */}
           <div className="flex flex-col gap-2 pb-2.5">
-            <div className="flex justify-between items-center w-full gap-2">
-              <div className="flex items-center gap-2 min-w-0">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center w-full gap-2 border-b border-gray-100/50 pb-2 sm:pb-0 sm:border-none">
+              <div className="flex items-center gap-2 min-w-0 w-full sm:w-auto">
                 <Image src={fastShippingIcon} alt="Fast Shipping" className="w-10.25 h-10.25 rounded-md object-contain bg-white border border-gray-100 p-2 shrink-0" />
                 <div className="min-w-0">
                   <h3 className="text-[15px] xl:text-[16px] text-[#1F1F1F] font-semibold leading-tight">Fast Shipping</h3>
                 </div>
               </div>
-              <div className="flex items-center gap-3 xl:gap-4 shrink-0">
+              <div className="flex items-center justify-start sm:justify-end gap-4 sm:gap-6 w-full sm:w-auto pl-[49px] sm:pl-0 shrink-0">
                 <span className="text-[16px] text-[#0B0D10] font-medium w-4 text-center">1</span>
                 <h3 className="flex gap-1 text-[16px]">
                   <span className="text-[#6F7882] line-through font-normal">$5.99</span>
@@ -355,6 +369,7 @@ function BundleBuilder() {
           <button className="bg-[#4E2FD2] px-4 py-3 rounded-sm text-[17px] font-bold text-white hover:bg-[#3d24ab] transition-colors cursor-pointer">Checkout</button>
           <button onClick={saveSystem} className="text-center text-[14px] text-[#484848] underline italic cursor-pointer bg-transparent border-none">Save my system for later</button>
         </div>
+      </div>
       </div>
       </div>
     </div>

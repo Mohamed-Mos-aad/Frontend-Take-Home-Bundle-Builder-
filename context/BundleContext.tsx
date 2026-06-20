@@ -14,6 +14,8 @@ interface BundleContextType {
   handleDecrement: (productId: string, option?: string) => void;
   handleOptionSelect: (productId: string, option: string) => void;
   saveSystem: () => void;
+  showSaveToast: boolean;
+  setShowSaveToast: (show: boolean) => void;
   selectedItems: any[];
   subtotal: number;
   displayOriginalPrice: number;
@@ -30,6 +32,16 @@ export const BundleProvider: React.FC<{ children: React.ReactNode }> = ({ childr
   const [activeStep, setActiveStep] = useState<number>(1);
   const [selectedQuantities, setSelectedQuantities] = useState<Record<string, number>>({});
   const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>({});
+  const [showSaveToast, setShowSaveToast] = useState(false);
+
+  useEffect(() => {
+    if (showSaveToast) {
+      const timer = setTimeout(() => {
+        setShowSaveToast(false);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [showSaveToast]);
 
   useEffect(() => {
     // Check if there is saved data in localStorage
@@ -108,7 +120,7 @@ export const BundleProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       localStorage.setItem("bundle_selectedQuantities", JSON.stringify(selectedQuantities));
       localStorage.setItem("bundle_selectedOptions", JSON.stringify(selectedOptions));
       localStorage.setItem("bundle_activeStep", activeStep.toString());
-      alert("تم حفظ النظام الحالي بنجاح! سيتم استعادته تلقائياً عند تحميل الصفحة.");
+      setShowSaveToast(true);
     }
   };
 
@@ -173,6 +185,8 @@ export const BundleProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         handleDecrement,
         handleOptionSelect,
         saveSystem,
+        showSaveToast,
+        setShowSaveToast,
         selectedItems,
         subtotal,
         displayOriginalPrice,

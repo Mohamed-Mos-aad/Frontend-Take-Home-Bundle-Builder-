@@ -41,12 +41,12 @@ export default function DropList({
   }, 0);
 
   return (
-    <div className={`w-5/6 xl:w-full flex flex-col ${isOpen && 'bg-[#EDF4FF]'} rounded-[10px] mx-auto xl:mx-0 overflow-hidden`}>
+    <div className={`w-full flex flex-col ${isOpen && 'bg-[#EDF4FF]'} rounded-[10px] overflow-hidden`}>
       <div className="flex flex-col cursor-pointer" onClick={onToggle}>
         <span className="w-full text-[12px] text-[#484848] uppercase p-3.75 pb-1 text-start border-b">
           step {step} of {totalSteps}
         </span>
-        <h1 className={`w-full flex justify-between items-center text-[28px] text-[#0B0D10] p-3.75 ${isOpen ? 'pb-0 border-none' : 'border-b'} text-start`}>
+        <h1 className={`w-full flex justify-between items-center text-[18px] md:text-[28px] text-[#0B0D10] p-3.75 ${isOpen ? 'pb-0 border-none' : 'border-b'} text-start`}>
           <span className="flex items-center gap-2">
             {icon && icon.src && (
               <Image src={icon.src} alt={icon.alt} width={30} height={31} className="w-7 h-7" />
