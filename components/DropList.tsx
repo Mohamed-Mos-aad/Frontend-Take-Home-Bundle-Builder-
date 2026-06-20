@@ -1,9 +1,9 @@
-"use client"
-// ** Hooks && Tools
+"use client";
+
 import React from "react";
 import Image from "next/image";
-// ** Components
 import ProductCard, { Product } from "./ProductCard";
+import { useBundle } from "@/context/BundleContext";
 
 interface DropListProps {
   step: number;
@@ -13,11 +13,6 @@ interface DropListProps {
   isOpen: boolean;
   onToggle: () => void;
   products: Product[];
-  selectedQuantities: Record<string, number>;
-  selectedOptions: Record<string, string>;
-  onOptionSelect: (productId: string, option: string) => void;
-  onIncrement: (productId: string) => void;
-  onDecrement: (productId: string) => void;
   nextStepName?: string;
   onNext?: () => void;
 }
@@ -30,18 +25,23 @@ export default function DropList({
   isOpen,
   onToggle,
   products,
-  selectedQuantities,
-  selectedOptions,
-  onOptionSelect,
-  onIncrement,
-  onDecrement,
   nextStepName,
   onNext
 }: DropListProps) {
-  const selectedCount = products.reduce((acc, p) => acc + (selectedQuantities[p.id] || 0), 0);
+  const { selectedQuantities } = useBundle();
+
+  // Calculate the total selected quantity in this step (summing all product variants)
+  const selectedCount = products.reduce((acc, p) => {
+    if (p.options && p.options.length > 0) {
+      const optSum = p.options.reduce((sum, opt) => sum + (selectedQuantities[`${p.id}_${opt}`] || 0), 0);
+      return acc + optSum;
+    } else {
+      return acc + (selectedQuantities[p.id] || 0);
+    }
+  }, 0);
 
   return (
-    <div className={`w-5/6 flex flex-col ${isOpen && 'bg-[#EDF4FF]'} rounded-[10px] mx-auto overflow-hidden`}>
+    <div className={`w-5/6 xl:w-full flex flex-col ${isOpen && 'bg-[#EDF4FF]'} rounded-[10px] mx-auto xl:mx-0 overflow-hidden`}>
       <div className="flex flex-col cursor-pointer" onClick={onToggle}>
         <span className="w-full text-[12px] text-[#484848] uppercase p-3.75 pb-1 text-start border-b">
           step {step} of {totalSteps}
@@ -81,11 +81,6 @@ export default function DropList({
                 <ProductCard
                   key={product.id}
                   product={product}
-                  quantity={selectedQuantities[product.id] || 0}
-                  selectedOption={selectedOptions[product.id] || product.options[0] || ""}
-                  onOptionSelect={(option) => onOptionSelect(product.id, option)}
-                  onIncrement={() => onIncrement(product.id)}
-                  onDecrement={() => onDecrement(product.id)}
                 />
               ))}
             </div>
